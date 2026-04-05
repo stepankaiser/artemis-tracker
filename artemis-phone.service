@@ -1,0 +1,14 @@
+[Unit]
+Description=Artemis II Phone Display Setup
+After=artemis-tracker.service
+Wants=artemis-tracker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=artemis
+ExecStartPre=/bin/sleep 5
+ExecStart=/bin/bash /home/artemis/artemis/setup_phone.sh
+
+[Install]
+WantedBy=multi-user.target

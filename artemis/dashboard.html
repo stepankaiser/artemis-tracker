@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Artemis II</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+/* Fallback if Google Fonts unavailable */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100vh;overflow:hidden;background:#000;color:#fff;font-family:'Inter',sans-serif}
+body{background:radial-gradient(ellipse at 30% 15%,#0a0e2a 0%,#050810 50%,#000 100%)}
+
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--dur) ease-in-out infinite alternate}
+@keyframes twinkle{0%{opacity:var(--min)}100%{opacity:var(--max)}}
+
+.c{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  height:100vh;height:100dvh;
+  padding:12px 14px 8px;
+  gap:8px;
+}
+
+/* Header */
+.hdr{text-align:center;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.title{font-family:'Orbitron','Courier New',monospace;font-size:24px;font-weight:900;letter-spacing:3px;
+  background:linear-gradient(135deg,#4fc3f7,#fff,#b388ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{
+  display:inline-block;margin-top:5px;
+  font-family:'Orbitron','Courier New',monospace;font-size:11px;font-weight:700;
+  padding:3px 14px;border-radius:16px;letter-spacing:2px;
+  border:1px solid rgba(100,180,255,0.4);background:rgba(100,180,255,0.1);color:#4fc3f7;
+}
+.met{font-family:'Orbitron','Courier New',monospace;font-size:18px;color:#c0c8e0;letter-spacing:1px;margin-top:6px}
+
+/* Stats */
+.stats{display:flex;flex-direction:column;gap:6px}
+.sr{
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:10px 14px;
+}
+.sl{font-size:11px;color:#5a6480;text-transform:uppercase;letter-spacing:1.5px}
+.sv{font-family:'Orbitron','Courier New',monospace;font-size:22px;font-weight:700}
+.su{font-size:10px;color:#5a6480;margin-left:3px}
+.se .sv{color:#4fc3f7}
+.sm .sv{color:#e0e0e0}
+.ss .sv{color:#ff8a65}
+
+/* Progress */
+.prog{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:8px 14px;
+}
+.prog-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.prog-l{font-size:10px;color:#5a6480;text-transform:uppercase;letter-spacing:1.5px}
+.prog-p{font-family:'Orbitron','Courier New',monospace;font-size:14px;color:#b388ff;font-weight:700}
+.prog-b{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.prog-f{height:100%;border-radius:3px;background:linear-gradient(90deg,#1565c0,#4fc3f7,#b388ff);transition:width 2s ease}
+
+/* Cards */
+.cards{flex:1;display:flex;flex-direction:column;gap:6px;min-height:0;overflow:hidden}
+.card{
+  flex:1;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:10px 14px;
+  display:flex;flex-direction:column;
+  overflow:hidden;min-height:0;
+}
+.ct{font-size:11px;color:#5a6480;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
+.mn{font-family:'Orbitron','Courier New',monospace;font-size:18px;font-weight:700;color:#4fc3f7;margin-bottom:4px}
+.md{font-size:14px;color:#8892b0;line-height:1.4}
+.mc{font-family:'Orbitron','Courier New',monospace;font-size:28px;font-weight:700;color:#fff;margin-top:auto}
+.tl{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.td{font-size:14px;opacity:0.2;transition:opacity 0.5s}
+.td.p{opacity:1.0}
+.ft{font-size:16px;color:#c8d0e0;line-height:1.6;font-style:italic;display:flex;align-items:center;flex:1}
+
+/* Crew */
+.crew{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.cm{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:6px 10px}
+.cn{font-size:11px;font-weight:600;color:#c0c8e0}
+.cr{font-size:9px;color:#5a6480;text-transform:uppercase;letter-spacing:0.5px}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="c">
+  <div class="hdr">
+    <div class="title">ARTEMIS II</div>
+    <div><span class="badge" id="phase">OUTBOUND</span></div>
+    <div class="met" id="met">T+00d 00:00:00</div>
+  </div>
+  <div class="stats">
+    <div class="sr se"><div class="sl">Earth</div><div><span class="sv" id="de">0</span><span class="su">km</span></div></div>
+    <div class="sr sm"><div class="sl">Moon</div><div><span class="sv" id="dm">0</span><span class="su">km</span></div></div>
+    <div class="sr ss"><div class="sl">Speed</div><div><span class="sv" id="sp">0</span><span class="su">km/h</span></div></div>
+  </div>
+  <div class="prog">
+    <div class="prog-h"><div class="prog-l">Mission</div><div class="prog-p" id="pp">0%</div></div>
+    <div class="prog-b"><div class="prog-f" id="pf"></div></div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <div class="ct">Next Milestone</div>
+      <div class="mn" id="msn">—</div>
+      <div class="md" id="msd"></div>
+      <div class="mc" id="msc">—</div>
+      <div class="tl" id="tl"></div>
+    </div>
+    <div class="card">
+      <div class="ct">Did You Know?</div>
+      <div class="ft" id="fact">Connecting...</div>
+    </div>
+  </div>
+</div>
+<script>
+// Fullscreen: try API on every tap + auto-scroll to hide Chrome URL bar
+function goFS(){
+  const e=document.documentElement;
+  if(e.requestFullscreen)e.requestFullscreen().catch(()=>{});
+  else if(e.webkitRequestFullscreen)e.webkitRequestFullscreen();
+}
+document.addEventListener('click',goFS);
+document.addEventListener('touchstart',goFS);
+// Auto-scroll trick: hides mobile Chrome URL bar
+setTimeout(()=>window.scrollTo(0,1),500);
+setTimeout(()=>window.scrollTo(0,1),1500);
+
+const S=document.getElementById('stars');
+for(let i=0;i<70;i++){const s=document.createElement('div');s.className='star';
+s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${1+Math.random()*1.5}px;height:${1+Math.random()*1.5}px;--dur:${2+Math.random()*4}s;--min:${Math.random()*0.2};--max:${0.3+Math.random()*0.7}`;S.appendChild(s)}
+
+function fmt(n){return n<1000?Math.round(n).toLocaleString():Math.round(n).toLocaleString()}
+function fcd(s){if(s>86400){const d=~~(s/86400),h=~~(s%86400/3600);return d+'d '+h+'h'}
+if(s>3600){const h=~~(s/3600),m=~~(s%3600/60);return h+'h '+m+'m'}
+if(s>60)return ~~(s/60)+'m '+(s%60)+'s';return s+'s'}
+const PL={prelaunch:'PRE-LAUNCH',earth_orbit:'EARTH ORBIT',outbound:'OUTBOUND',flyby:'LUNAR FLYBY','return':'HOMEBOUND',reentry:'REENTRY',splashdown:'SPLASHDOWN'};
+
+function connect(){
+const ws=new WebSocket(`ws://${location.host}/ws`);
+ws.onmessage=e=>{const d=JSON.parse(e.data);
+document.getElementById('met').textContent=d.met;
+document.getElementById('phase').textContent=PL[d.phase]||d.phase;
+document.getElementById('de').textContent=fmt(d.dist_earth);
+document.getElementById('dm').textContent=fmt(d.dist_moon);
+document.getElementById('sp').textContent=fmt(d.speed);
+document.getElementById('pf').style.width=(d.progress*100)+'%';
+document.getElementById('pp').textContent=Math.round(d.progress*100)+'%';
+if(d.next_milestone){document.getElementById('msn').textContent=d.next_milestone.emoji+' '+d.next_milestone.name;
+document.getElementById('msd').textContent=d.next_milestone.desc;
+document.getElementById('msc').textContent=fcd(d.next_milestone.seconds)}
+else{document.getElementById('msn').textContent='Mission Complete!';
+document.getElementById('msd').textContent='Safe splashdown in the Pacific';document.getElementById('msc').textContent=''}
+if(d.milestones)document.getElementById('tl').innerHTML=d.milestones.map(m=>`<span class="td ${m.passed?'p':''}">${m.emoji}</span>`).join('');
+if(d.fact)document.getElementById('fact').textContent=d.fact;
+if(d.crew)document.getElementById('crew').innerHTML=d.crew.map(c=>`<div class="cm"><div class="cn">${c.name}</div><div class="cr">${c.role}</div></div>`).join('')};
+ws.onclose=()=>setTimeout(connect,2000);ws.onerror=()=>ws.close()}
+connect();
+</script>
+</body>
+</html>

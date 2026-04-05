@@ -1,0 +1,15 @@
+[Unit]
+Description=Artemis II LED Tracker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=artemis
+WorkingDirectory=/home/artemis/artemis
+ExecStart=/home/artemis/artemis/.venv/bin/python -m artemis
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
